@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analisador de Números</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <div class="max-w-lg mx-auto mt-10 bg-white shadow-md rounded-lg p-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">Analisador de Números</h1>
+    <div class="flex items-center gap-4 mb-4">
+      <input
+        type="number"
+        id="fnum"
+        placeholder="Digite um número (1 a 100)"
+        class="w-full border border-gray-300 rounded-md p-2"
+      />
+      <button
+        onclick="adicionar()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+      >
+        Adicionar
+      </button>
+    </div>
+    <select id="flista" size="6" class="w-full border border-gray-300 rounded-md p-2 mb-4"></select>
+    <div class="text-center">
+      <button
+        onclick="finalizar()"
+        class="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition"
+      >
+        Finalizar
+      </button>
+    </div>
+    <div id="res" class="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-md"></div>
+  </div>
+
+  <script>
+    const num = document.querySelector("#fnum");
+    const lista = document.querySelector("#flista");
+    const res = document.querySelector("#res");
+    const valores = [];
+
+    function isNumero(n) {
+      return Number(n) >= 1 && Number(n) <= 100;
+    }
+
+    function inLista(n, l) {
+      return l.indexOf(Number(n)) !== -1;
+    }
+
+    function adicionar() {
+      if (isNumero(num.value) && !inLista(num.value, valores)) {
+        valores.push(Number(num.value));
+        const item = document.createElement("option");
+        item.text = `Valor ${num.value} adicionado.`;
+        lista.appendChild(item);
+        res.innerHTML = "";
+        num.value = "";
+        num.focus();
+      } else {
+        alert("Valor inválido ou já encontrado na lista.");
+      }
+    }
+
+    function finalizar() {
+      if (valores.length === 0) {
+        alert("Adicione valores antes de finalizar!");
+      } else {
+        const tot = valores.length;
+        const maior = Math.max(...valores);
+        const menor = Math.min(...valores);
+        const soma = valores.reduce((acc, cur) => acc + cur, 0);
+        const media = soma / tot;
+
+        res.innerHTML = `
+          <p>Ao todo, temos <strong>${tot}</strong> números cadastrados.</p>
+          <p>O maior valor informado foi <strong>${maior}</strong>.</p>
+          <p>O menor valor informado foi <strong>${menor}</strong>.</p>
+          <p>Somando todos os valores, temos <strong>${soma}</strong>.</p>
+          <p>A média dos valores digitados é <strong>${media.toFixed(2)}</strong>.</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
